@@ -1,0 +1,39 @@
+version: "3"
+
+volumes:
+  loki_data:
+  redis_data:
+  postgres_data:
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    container_name: unofficial_redis
+    restart: on-failure
+    volumes:
+      - ./tmp/redis_data:/data
+    ports:
+      - 6379:6379
+
+  postgres:
+    image: postgres:15.3-alpine3.18
+    container_name: unofficial_db
+    restart: on-failure
+    environment:
+      POSTGRES_DB: unofficialdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - ./tmp/postgres_data:/data/postgres
+    ports:
+        - 5432:5432
+
+  loki:
+    image: grafana/loki
+    container_name: unofficial_loki
+    restart: on-failure
+    volumes:
+      - ./tmp/loki_data:/var/lib/loki
+    ports:
+      - 9000:3000
