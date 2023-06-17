@@ -34,7 +34,7 @@ services:
           property: connectionString
       - fromGroup: prod-env
   
-  - type: cron
+  - type: worker
     name: unofficial-cron
     env: docker
     branch: prod
