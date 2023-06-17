@@ -1,0 +1,73 @@
+services:
+  - type: web
+    name: unofficial-api
+    env: docker
+    branch: prod
+    dockerCommand: ./scripts/start.api.sh
+    numInstances: 2
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: unofficial-redis
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: unofficial-db
+          property: connectionString
+      - fromGroup: prod-env
+  
+  - type: worker
+    name: unofficial-worker
+    env: docker
+    branch: prod
+    dockerCommand: ./scripts/start.worker.sh
+    envVars: 
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: unofficial-redis
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: unofficial-db
+          property: connectionString
+      - fromGroup: prod-env
+  
+  - type: cron
+    name: unofficial-cron
+    env: docker
+    branch: prod
+    dockerCommand: ./scripts/start.cron.sh
+    envVars: 
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: unofficial-redis
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: unofficial-db
+          property: connectionString
+      - fromGroup: prod-env
+
+  - type: redis
+    name: unofficial-redis
+    ipAllowList: []
+    plan: free
+    maxmemoryPolicy: allkeys-lfu
+
+databases:
+  - name: unofficial-db
+    databaseName: unofficialdb
+    user: unofficialuser
+
+envVarGroups:
+  - name: prod-env
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: SECRET_KEY_BASE
+        sync: false
+      - key: DATABASE_URL
+        sync: false
