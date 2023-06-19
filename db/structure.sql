@@ -52,7 +52,8 @@ CREATE TABLE public.accounts (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     configurable_type character varying,
-    configurable_id uuid
+    configurable_id uuid,
+    user_id uuid NOT NULL
 );
 
 
@@ -306,10 +307,24 @@ CREATE INDEX index_accounts_on_configurable ON public.accounts USING btree (conf
 
 
 --
+-- Name: index_accounts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_accounts_on_user_id ON public.accounts USING btree (user_id);
+
+
+--
 -- Name: index_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_profiles_on_user_id ON public.profiles USING btree (user_id);
+
+
+--
+-- Name: index_render_account_configurations_on_api_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_render_account_configurations_on_api_key ON public.render_account_configurations USING btree (api_key);
 
 
 --
@@ -392,6 +407,14 @@ ALTER TABLE ONLY public.render_deployments
 
 
 --
+-- Name: accounts fk_rails_b1e30bebc8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT fk_rails_b1e30bebc8 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: profiles fk_rails_e424190865; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -425,6 +448,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230618171524'),
 ('20230618181856'),
 ('20230619080041'),
-('20230619111134');
+('20230619111134'),
+('20230619140156');
 
 

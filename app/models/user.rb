@@ -24,6 +24,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_one :profile
+  has_many :accounts
 
   def self.create_user_for_google(data)
     ActiveRecord::Base.transaction do 
