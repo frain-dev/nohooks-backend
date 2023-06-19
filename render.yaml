@@ -3,7 +3,6 @@ services:
     name: unofficial-api
     env: docker
     dockerCommand: ./scripts/start.api.sh
-    numInstances: 2
     envVars:
       - key: REDIS_URL
         fromService:
