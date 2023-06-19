@@ -1,0 +1,19 @@
+---
+:concurrency: 5
+development:
+  :queues:
+    - render_scheduler
+    - render_poller
+    - push_webhooks
+staging:
+  :concurrency: 10
+  :queues:
+    - render_scheduler
+    - render_poller
+    - push_webhooks
+production:
+  :concurrency: 10
+  :queues:
+    - render_scheduler
+    - render_poller
+    - push_webhooks
