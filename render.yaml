@@ -71,3 +71,13 @@ envVarGroups:
         sync: false
       - key: DATABASE_URL
         sync: false
+      - key: GOOGLE_API
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: JWT_DEFAULT_EXPIRY_TIME
+        sync: false
+      - key: JWT_LONG_EXPIRY_TIME
+        sync: false
+      - key: POLL_RENDER
+        sync: false

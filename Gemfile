@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "3.2.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4", ">= 7.0.4.3"
@@ -82,6 +82,20 @@ gem 'active_model_serializers', '~> 0.10.0'
                                                     
 # Connection Pool                                   
 gem 'connection_pool'      
+
+# Render Client
+gem 'render_ruby'
+gem 'faraday'
+
+# Google PubSub
+# gem 'google-cloud-pubsub'
+# gem 'grpc', '1.50.0'
+
+# User management
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem "omniauth-rails_csrf_protection"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
