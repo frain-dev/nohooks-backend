@@ -2,7 +2,6 @@ services:
   - type: web
     name: unofficial-api
     env: docker
-    branch: prod
     dockerCommand: ./scripts/start.api.sh
     numInstances: 2
     envVars:
@@ -20,7 +19,6 @@ services:
   - type: worker
     name: unofficial-worker
     env: docker
-    branch: prod
     dockerCommand: ./scripts/start.worker.sh
     envVars: 
       - key: REDIS_URL
@@ -37,7 +35,6 @@ services:
   - type: worker
     name: unofficial-cron
     env: docker
-    branch: prod
     dockerCommand: ./scripts/start.cron.sh
     envVars: 
       - key: REDIS_URL
