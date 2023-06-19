@@ -1,5 +1,5 @@
 module Render
-  class PollDeployment < ApplicationInteractor
+  class PollDeployments < ApplicationInteractor
     def call
       @account = context.account
       @client = RenderRuby::Client.new(api_key: @account.api_key)
