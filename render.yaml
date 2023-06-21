@@ -83,4 +83,6 @@ envVarGroups:
         sync: false
       - key: CONVOY_PROJECT_ID
         sync: false
+      - key: SENTRY_DSN
+        sync: false
 
