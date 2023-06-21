@@ -6,6 +6,7 @@
 #  configurable_type :string
 #  last_poll_time    :datetime         not null
 #  name              :string           not null
+#  portal_link_url   :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  configurable_id   :uuid
@@ -23,4 +24,8 @@
 class Account < ApplicationRecord
   belongs_to :configurable, polymorphic: true, dependent: :destroy
   belongs_to :user
+
+  def render_services
+    RenderService.where(account: self)
+  end
 end

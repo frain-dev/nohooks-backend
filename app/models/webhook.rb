@@ -8,8 +8,19 @@
 #  status     :integer          default("pending")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  account_id :uuid
+#
+# Indexes
+#
+#  index_webhooks_on_account_id  (account_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (account_id => accounts.id)
 #
 class Webhook < ApplicationRecord
+  belongs_to :account
+
   STATUSES = { pending: 0, sent: 1 }.freeze
   enum status: STATUSES
 end

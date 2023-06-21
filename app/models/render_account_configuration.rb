@@ -12,5 +12,5 @@
 #  index_render_account_configurations_on_api_key  (api_key) UNIQUE
 #
 class RenderAccountConfiguration < ApplicationRecord
-  has_one :account, as: :configurable
+  has_one :account, as: :configurable, class_name: 'Account'
 end

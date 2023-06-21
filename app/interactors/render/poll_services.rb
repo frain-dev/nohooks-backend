@@ -2,8 +2,8 @@ module Render
   class PollServices < ApplicationInteractor
     def call 
       @account = context.account
-      @client = RenderRuby::Client.new(api_key: @account.api_key)
-      services = retrieve_account_services(@account)
+      @client = RenderRuby::Client.new(api_key: @account.configurable.api_key)
+      services = retrieve_account_services
       
       return if services.empty?
   
@@ -26,12 +26,12 @@ module Render
     private
   
     def retrieve_account_services(cursor: nil) 
-      services = client.services.list(limit: 100, cursor: cursor)
+      services = @client.services.list(limit: 100, cursor: cursor)
       if services.total == 0
         return services.data
       end
 
-      return services.data.concat(retrieve_account_services(services.next_cursor))
+      return services.data.concat(retrieve_account_services(cursor: services.next_cursor))
     end
   
     def compute_service_hash(service)
@@ -40,15 +40,15 @@ module Render
   
     def send_service_created_event(service, hash)
       ActiveRecord::Base.transaction do 
-        RenderService.create(account: @account, service_id: service.id, object_hash: hash)
-        Webhook.create(event_type: "service.created", payload: service.to_h)
+        RenderService.create!(account: @account, service_id: service.id, object_hash: hash)
+        Webhook.create!(account: @account, event_type: "service.created", payload: service.to_h)
       end
     end
   
     def send_service_updated_event(db_service, service, hash)
       ActiveRecord::Base.transaction do
-        update = db_service.update(object_hash: hash)
-        Webhook.create(event_type: "service.updated", payload: service.to_h)
+        update = db_service.update!(object_hash: hash)
+        Webhook.create!(account: @account, event_type: "service.updated", payload: service.to_h)
       end
     end
   end

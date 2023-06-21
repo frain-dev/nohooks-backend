@@ -10,6 +10,13 @@ class Api::V1::AccountsController < ApplicationController
     render status: 200, json: json
   end
 
+  def show
+    json = generate_json(status: true,
+                         message: ApiResponse::Account.retrieved_successfully,
+                         data: @account)
+    render status: 200, json: json
+  end
+
   def create
     type = create_params[:type]
 
@@ -25,6 +32,19 @@ class Api::V1::AccountsController < ApplicationController
           last_poll_time: DateTime.now,
           configurable: render_account_config
         )
+
+        portal_link = Convoy::PortalLink.new(
+          data: {
+            name: "#{@account.name}'s dashboard",
+            owner_id: @account.id,
+            can_manage_endpoint: true
+          }
+        )
+
+        res = portal_link.save
+        raise StandardError, "couldn't create portal link" if res&.response.nil? || res&.response['status'] == false
+
+        @account.update!(portal_link_url: res.response['data']['url'])
       end
 
       json = generate_json(status: true,

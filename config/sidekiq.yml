@@ -5,15 +5,18 @@ development:
     - render_scheduler
     - render_poller
     - push_webhooks
+    - webhooks_delivery_scheduler
 staging:
   :concurrency: 10
   :queues:
     - render_scheduler
     - render_poller
     - push_webhooks
+    - webhooks_delivery_scheduler
 production:
   :concurrency: 10
   :queues:
     - render_scheduler
     - render_poller
     - push_webhooks
+    - webhooks_delivery_scheduler

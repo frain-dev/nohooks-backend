@@ -6,6 +6,7 @@
 #  configurable_type :string
 #  last_poll_time    :datetime         not null
 #  name              :string           not null
+#  portal_link_url   :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  configurable_id   :uuid
@@ -21,7 +22,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class AccountSerializer < ApplicationSerializer
-  attributes :id, :name, :type
+  attributes :id, :name, :type, :portal_link_url
 
   def type
     return "render" if object.configurable_type == "RenderAccountConfiguration"
