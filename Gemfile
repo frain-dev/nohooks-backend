@@ -90,8 +90,7 @@ gem 'faraday'
 # Google PubSub
 # gem 'google-cloud-pubsub'
 # gem 'grpc'
-# gem 'convoy.rb'
-gem 'convoy.rb', path: '/Users/subomioluwalana/Code/convoy-clients/convoy-ruby'
+gem 'convoy.rb'
 
 # User management
 gem 'devise'
