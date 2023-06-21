@@ -5,6 +5,12 @@ GIT
     by_star (4.0.1)
       activesupport (>= 3.2.0)
 
+PATH
+  remote: /Users/subomioluwalana/Code/convoy-clients/convoy-ruby
+  specs:
+    convoy.rb (0.2.0)
+      zeitwerk (~> 2.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -393,6 +399,7 @@ DEPENDENCIES
   capybara
   clockwork
   connection_pool
+  convoy.rb!
   database_cleaner
   debug
   devise

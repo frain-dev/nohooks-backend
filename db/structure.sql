@@ -53,7 +53,8 @@ CREATE TABLE public.accounts (
     updated_at timestamp(6) without time zone NOT NULL,
     configurable_type character varying,
     configurable_id uuid,
-    user_id uuid NOT NULL
+    user_id uuid NOT NULL,
+    portal_link_url character varying
 );
 
 
@@ -117,7 +118,7 @@ CREATE TABLE public.render_services (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     service_id character varying NOT NULL,
     object_hash character varying NOT NULL,
-    render_account_id uuid,
+    account_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -184,7 +185,8 @@ CREATE TABLE public.webhooks (
     payload json NOT NULL,
     status integer DEFAULT 0,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    account_id uuid
 );
 
 
@@ -342,10 +344,10 @@ CREATE INDEX index_render_deployments_on_render_service_id ON public.render_depl
 
 
 --
--- Name: index_render_services_on_render_account_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_render_services_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_render_services_on_render_account_id ON public.render_services USING btree (render_account_id);
+CREATE INDEX index_render_services_on_account_id ON public.render_services USING btree (account_id);
 
 
 --
@@ -377,6 +379,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
+-- Name: index_webhooks_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_webhooks_on_account_id ON public.webhooks USING btree (account_id);
+
+
+--
 -- Name: index_whitelisted_jwts_on_jti; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -395,7 +404,7 @@ CREATE INDEX index_whitelisted_jwts_on_user_id ON public.whitelisted_jwts USING 
 --
 
 ALTER TABLE ONLY public.render_services
-    ADD CONSTRAINT fk_rails_0fcb96adc5 FOREIGN KEY (render_account_id) REFERENCES public.accounts(id);
+    ADD CONSTRAINT fk_rails_0fcb96adc5 FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --
@@ -404,6 +413,14 @@ ALTER TABLE ONLY public.render_services
 
 ALTER TABLE ONLY public.render_deployments
     ADD CONSTRAINT fk_rails_39c1f3b789 FOREIGN KEY (render_service_id) REFERENCES public.render_services(id);
+
+
+--
+-- Name: webhooks fk_rails_8f6c17001b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.webhooks
+    ADD CONSTRAINT fk_rails_8f6c17001b FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --
@@ -449,6 +466,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230618181856'),
 ('20230619080041'),
 ('20230619111134'),
-('20230619140156');
+('20230619140156'),
+('20230621104650'),
+('20230621121811'),
+('20230621133250');
 
 

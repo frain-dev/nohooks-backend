@@ -19,4 +19,5 @@
 #  fk_rails_...  (render_service_id => render_services.id)
 #
 class RenderDeployment < ApplicationRecord
+  belongs_to :render_service
 end

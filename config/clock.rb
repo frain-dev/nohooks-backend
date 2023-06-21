@@ -10,9 +10,9 @@ module Clockwork
     job.camelize.constantize.perform_later
   end
 
-  poll_render = ENV['POLL_RENDER'].to_i.seconds
-  every(poll_render, 'poll_render_job')
+  poll_interval = ENV['POLL_INTERVAL'].to_i.seconds
+  every(poll_interval, 'poll_accounts_job')
 
   push_webhooks_interval = ENV['PUSH_WEBHOOKS_INTERVAL'].to_i.seconds
-  every(push_webhooks_interval, 'push_webhooks_to_convoy_job')
+  every(push_webhooks_interval, 'push_webhooks_job')
 end

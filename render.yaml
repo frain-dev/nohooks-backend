@@ -75,5 +75,14 @@ envVarGroups:
         sync: false
       - key: JWT_LONG_EXPIRY_TIME
         sync: false
-      - key: POLL_RENDER
+      - key: POLL_INTERVAL
         sync: false
+      - key: PUSH_WEBHOOKS_INTERVAL
+        sync: false
+      - key: CONVOY_API_KEY
+        sync: false
+      - key: CONVOY_PROJECT_ID
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
