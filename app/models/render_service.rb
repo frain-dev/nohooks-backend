@@ -20,4 +20,5 @@
 #
 class RenderService < ApplicationRecord
   belongs_to :account
+  has_many :render_deployments, dependent: :delete_all
 end

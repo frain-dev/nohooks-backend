@@ -5,7 +5,7 @@ class PollRenderResourcesJob < ApplicationJob
     account = Account.find(account_id)
 
     #Render::PollJobs.call(account: account)
-    #Render::PollServices.call(account: account)
+    Render::PollServices.call(account: account)
     Render::PollDeployments.call(account: account)
   end
 end

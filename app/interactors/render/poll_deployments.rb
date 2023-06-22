@@ -53,10 +53,23 @@ module Render
     end
   
     def send_deployment_status_event(db_deployment, deployment, hash)
+      case deployment.status
+      when "live"
+        event_type = "deployment.live"
+      when "canceled"
+        event_type = "deployment.canceled"
+      when "deactivated"
+        event_type = "deployment.deactivated"
+      when "build_failed", "update_failed"
+        event_type = "deployment.failed"
+      else
+        event_type = "deployment.updated" 
+      end 
+
       ActiveRecord::Base.transaction do
         update = db_deployment.update!(object_hash: hash)
         Webhook.create!(account: @account, 
-                        event_type: "deployment.updated", payload: deployment.to_h)
+                        event_type: event_type, payload: deployment.to_h)
       end
     end
   end

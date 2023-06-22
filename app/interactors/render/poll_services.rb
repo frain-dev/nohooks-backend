@@ -3,8 +3,8 @@ module Render
     def call 
       @account = context.account
       @client = RenderRuby::Client.new(api_key: @account.configurable.api_key)
-      services = retrieve_account_services
-      
+
+      services = retrieve_account_services      
       return if services.empty?
   
       services.each do |service|
@@ -21,6 +21,14 @@ module Render
           send_service_updated_event(db_service, service, computed_hash)
         end
       end
+
+      deleted_services = retrieve_deleted_services(services)
+      return if deleted_services.empty?
+
+      deleted_services.each do |db_service|
+        send_service_deleted_event(db_service)
+      end
+
     end
   
     private
@@ -32,6 +40,13 @@ module Render
       end
 
       return services.data.concat(retrieve_account_services(cursor: services.next_cursor))
+    end
+
+    def retrieve_deleted_services(services)
+      account_services = RenderService.where(account: @account).pluck(:service_id)
+      render_services = services.map {|s| s.service.id }
+      deleted_services = account_services - render_services
+      RenderService.where(service_id: deleted_services)
     end
   
     def compute_service_hash(service)
@@ -46,9 +61,28 @@ module Render
     end
   
     def send_service_updated_event(db_service, service, hash)
+      case service.suspended
+      when "suspended"
+        event_type = "service.suspended"
+      when "not_suspended"
+        event_type = "service.live"
+      else
+        event_type = "service.updated"
+      end
+
       ActiveRecord::Base.transaction do
         update = db_service.update!(object_hash: hash)
-        Webhook.create!(account: @account, event_type: "service.updated", payload: service.to_h)
+        Webhook.create!(account: @account, event_type: event_type, payload: service.to_h)
+      end
+    end
+
+    def send_service_deleted_event(db_service)
+      payload = {
+        id: db_service.service_id
+      }
+      ActiveRecord::Base.transaction do 
+        Webhook.create!(account: @account, event_type: "service.deleted", payload: payload)
+        db_service.destroy!
       end
     end
   end
