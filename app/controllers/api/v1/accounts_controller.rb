@@ -33,6 +33,10 @@ class Api::V1::AccountsController < ApplicationController
                           message: "Account created successfully",
                          data: @account)
     render status: 201, json: json 
+
+  rescue OAuth2::Error => e
+    json = generate_json(status: false, message: e.description)
+    render status: 400, json: json
   end
 
   def update
