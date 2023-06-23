@@ -71,6 +71,45 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: notion_account_configurations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notion_account_configurations (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    access_token character varying NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: notion_databases; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notion_databases (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    database_id character varying NOT NULL,
+    notion_account_configuration_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: notion_rows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notion_rows (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    row_id character varying,
+    object_hash character varying NOT NULL,
+    notion_database_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: profiles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -214,6 +253,30 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: notion_account_configurations notion_account_configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_account_configurations
+    ADD CONSTRAINT notion_account_configurations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notion_databases notion_databases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_databases
+    ADD CONSTRAINT notion_databases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notion_rows notion_rows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_rows
+    ADD CONSTRAINT notion_rows_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -316,6 +379,34 @@ CREATE INDEX index_accounts_on_user_id ON public.accounts USING btree (user_id);
 
 
 --
+-- Name: index_notion_account_configurations_on_access_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notion_account_configurations_on_access_token ON public.notion_account_configurations USING btree (access_token);
+
+
+--
+-- Name: index_notion_databases_on_notion_account_configuration_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notion_databases_on_notion_account_configuration_id ON public.notion_databases USING btree (notion_account_configuration_id);
+
+
+--
+-- Name: index_notion_rows_on_notion_database_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notion_rows_on_notion_database_id ON public.notion_rows USING btree (notion_database_id);
+
+
+--
+-- Name: index_notion_rows_on_notion_database_id_and_row_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_notion_rows_on_notion_database_id_and_row_id ON public.notion_rows USING btree (notion_database_id, row_id);
+
+
+--
 -- Name: index_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -400,11 +491,26 @@ CREATE INDEX index_whitelisted_jwts_on_user_id ON public.whitelisted_jwts USING 
 
 
 --
+-- Name: unique_database_per_account; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX unique_database_per_account ON public.notion_databases USING btree (notion_account_configuration_id, database_id);
+
+
+--
 -- Name: render_services fk_rails_0fcb96adc5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.render_services
     ADD CONSTRAINT fk_rails_0fcb96adc5 FOREIGN KEY (account_id) REFERENCES public.accounts(id);
+
+
+--
+-- Name: notion_databases fk_rails_1b1a460a2f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_databases
+    ADD CONSTRAINT fk_rails_1b1a460a2f FOREIGN KEY (notion_account_configuration_id) REFERENCES public.notion_account_configurations(id);
 
 
 --
@@ -421,6 +527,14 @@ ALTER TABLE ONLY public.render_deployments
 
 ALTER TABLE ONLY public.webhooks
     ADD CONSTRAINT fk_rails_8f6c17001b FOREIGN KEY (account_id) REFERENCES public.accounts(id);
+
+
+--
+-- Name: notion_rows fk_rails_96181da0af; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_rows
+    ADD CONSTRAINT fk_rails_96181da0af FOREIGN KEY (notion_database_id) REFERENCES public.notion_databases(id);
 
 
 --
@@ -469,6 +583,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230619140156'),
 ('20230621104650'),
 ('20230621121811'),
-('20230621133250');
+('20230621133250'),
+('20230623065032'),
+('20230623065709'),
+('20230623070129');
 
 

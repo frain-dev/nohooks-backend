@@ -26,5 +26,6 @@ class AccountSerializer < ApplicationSerializer
 
   def type
     return "render" if object.configurable_type == "RenderAccountConfiguration"
+    return "notion" if object.configurable_type == "NotionAccountConfiguration"
   end
 end
