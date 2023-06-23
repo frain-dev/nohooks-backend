@@ -1,5 +1,5 @@
 class Api::V1::AccountsController < ApplicationController
-  before_action :set_account, only: %i[update destroy]
+  before_action :set_account, only: %i[show update destroy]
   before_action :set_account_type, only: %i[create update]
 
   def index
