@@ -38,6 +38,11 @@ module Notion
     private
 
     def retrieve_rows(database, cursor: nil)
+      options = {database_id: database.database_id, page_size: 100}
+      unless cursor.nil?
+        options[:start_cursor] = cursor
+      end
+
       begin
         rows = @client.database_query(database_id: database.database_id,
                                       page_size: 100)
