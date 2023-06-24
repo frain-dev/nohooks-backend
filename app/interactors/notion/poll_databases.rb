@@ -44,8 +44,7 @@ module Notion
       end
 
       begin
-        rows = @client.database_query(database_id: database.database_id,
-                                      page_size: 100)
+        rows = @client.database_query(options)
       rescue Notion::Api::Errors::ObjectNotFound
         database.destroy
         return 
