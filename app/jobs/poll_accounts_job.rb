@@ -12,7 +12,7 @@ class PollAccountsJob < ApplicationJob
   def poll_account(account)
     case account.configurable_type
     when "RenderAccountConfiguration"
-      #PollRenderResourcesJob.perform_later(account.id)
+      PollRenderResourcesJob.perform_later(account.id)
     when "NotionAccountConfiguration"
       PollNotionResourcesJob.perform_later(account.id)
     end
