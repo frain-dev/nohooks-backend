@@ -87,6 +87,9 @@ gem 'connection_pool'
 gem 'render_ruby'
 gem 'faraday'
 
+# Notion Client
+gem 'notion-ruby-client'
+
 # Google PubSub
 # gem 'google-cloud-pubsub'
 # gem 'grpc'

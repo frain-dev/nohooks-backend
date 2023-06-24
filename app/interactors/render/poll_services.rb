@@ -4,6 +4,8 @@ module Render
       @account = context.account
       @client = RenderRuby::Client.new(api_key: @account.configurable.api_key)
 
+      return if @account.configurable_type != "RenderAccountConfiguration"
+
       services = retrieve_account_services      
       return if services.empty?
   
