@@ -89,7 +89,7 @@ CREATE TABLE public.notion_account_configurations (
 CREATE TABLE public.notion_databases (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     database_id character varying NOT NULL,
-    notion_account_configuration_id uuid,
+    account_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -386,10 +386,10 @@ CREATE INDEX index_notion_account_configurations_on_access_token ON public.notio
 
 
 --
--- Name: index_notion_databases_on_notion_account_configuration_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_notion_databases_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_notion_databases_on_notion_account_configuration_id ON public.notion_databases USING btree (notion_account_configuration_id);
+CREATE INDEX index_notion_databases_on_account_id ON public.notion_databases USING btree (account_id);
 
 
 --
@@ -494,7 +494,7 @@ CREATE INDEX index_whitelisted_jwts_on_user_id ON public.whitelisted_jwts USING 
 -- Name: unique_database_per_account; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX unique_database_per_account ON public.notion_databases USING btree (notion_account_configuration_id, database_id);
+CREATE UNIQUE INDEX unique_database_per_account ON public.notion_databases USING btree (account_id, database_id);
 
 
 --
@@ -506,19 +506,19 @@ ALTER TABLE ONLY public.render_services
 
 
 --
--- Name: notion_databases fk_rails_1b1a460a2f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.notion_databases
-    ADD CONSTRAINT fk_rails_1b1a460a2f FOREIGN KEY (notion_account_configuration_id) REFERENCES public.notion_account_configurations(id);
-
-
---
 -- Name: render_deployments fk_rails_39c1f3b789; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.render_deployments
     ADD CONSTRAINT fk_rails_39c1f3b789 FOREIGN KEY (render_service_id) REFERENCES public.render_services(id);
+
+
+--
+-- Name: notion_databases fk_rails_80aa5ef3d0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notion_databases
+    ADD CONSTRAINT fk_rails_80aa5ef3d0 FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --

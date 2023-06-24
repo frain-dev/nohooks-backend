@@ -9,5 +9,13 @@ module ApiResponse
     def self.created_successfully
       "Account created successfully"
     end
+
+    def self.created_failed
+      "Account creation failed"
+    end
+
+    def self.update_failed
+      "Account update failed"
+    end
   end
 end

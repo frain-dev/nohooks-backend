@@ -28,4 +28,8 @@ class Account < ApplicationRecord
   def render_services
     RenderService.where(account: self)
   end
+
+  def notion_databases
+    NotionDatabase.where(account: self)
+  end
 end

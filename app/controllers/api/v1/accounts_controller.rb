@@ -30,7 +30,7 @@ class Api::V1::AccountsController < ApplicationController
     end
 
     json = generate_json(status: true,
-                          message: "Account created successfully",
+                         message: ApiResponse::Account.created_successfully,
                          data: @account)
     render status: 201, json: json 
 
@@ -40,12 +40,15 @@ class Api::V1::AccountsController < ApplicationController
   end
 
   def update
-    ActiveRecord::Base.transaction do
-      @account.update!(name: update_params[:name])
-      if !update_params[:data].nil?
-        @account.configurable.update!(update_params[:data])
-      end
+    if @account.configurable_type == "RenderAccountConfiguration"
+      update_render_configuration
+    elsif @account.configurable_type == "NotionAccountConfiguration"
+      update_notion_configuration
+    else
+      json = generate_json(status: false, message: ApiResponse::Account.update_failed)
+      render status: 400, json: json
     end
+
 
     @account.touch
     
@@ -122,11 +125,36 @@ class Api::V1::AccountsController < ApplicationController
         }
       )
 
+      databases = create_params[:data][:database].each do |db_id|
+        NotionDatabase.create!(account: @account, database_id: db_id)
+      end
+
       res = portal_link.save
       raise StandardError, "couldn't create portal link" if res&.response.nil? || 
         res&.response['status'] == false
 
       @account.update!(portal_link_url: res.response['data']['url'])
+    end
+  end
+
+  def update_render_configuration
+    ActiveRecord::Base.transaction do
+      @account.update!(name: update_params[:name])
+      if !update_params[:data].nil?
+        @account.configurable.update!(update_params[:data])
+      end
+    end
+  end
+
+  def update_notion_configuration
+    ActiveRecord::Base.transaction do
+      @account.update!(name: update_params[:name])
+      if !update_params[:data].nil?
+        NotionDatabase.where(account: @account).destroy_all
+        update_params[:data][:database].each do |db_id|
+          NotionDatabase.create!(account: @account, database_id: db_id)
+        end
+      end
     end
   end
 

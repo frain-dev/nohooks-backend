@@ -4,6 +4,7 @@ development:
   :queues:
     - render_scheduler
     - render_poller
+    - notion_poller
     - push_webhooks
     - webhooks_delivery_scheduler
 staging:
@@ -11,6 +12,7 @@ staging:
   :queues:
     - render_scheduler
     - render_poller
+    - notion_poller
     - push_webhooks
     - webhooks_delivery_scheduler
 production:
@@ -18,5 +20,6 @@ production:
   :queues:
     - render_scheduler
     - render_poller
+    - notion_poller
     - push_webhooks
     - webhooks_delivery_scheduler

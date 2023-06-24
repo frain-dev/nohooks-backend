@@ -22,10 +22,14 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class AccountSerializer < ApplicationSerializer
-  attributes :id, :name, :type, :portal_link_url
+  attributes :id, :name, :type, :portal_link_url, :notion_databases
 
   def type
     return "render" if object.configurable_type == "RenderAccountConfiguration"
     return "notion" if object.configurable_type == "NotionAccountConfiguration"
+  end
+
+  def notion_databases
+    object.notion_databases.pluck(:database_id)
   end
 end
