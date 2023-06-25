@@ -6,7 +6,6 @@ class ApplicationController < ActionController::API
   rescue_from ::ActiveRecord::RecordNotUnique, with: :record_not_unique
 
   before_action :authorize_request
-  #before_action :set_raven_context
 
   attr_reader :current_user
 
@@ -33,10 +32,5 @@ class ApplicationController < ActionController::API
     @current_user = Auth::AuthorizeApiRequest.new(request.headers).call[:user]
   rescue StandardError => e
     render status: 400, json: { status: false, message: e.message }
-  end
-
-  def set_raven_context
-    Raven.user_context(id: @current_user.id) if @current_user
-    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
   end
 end

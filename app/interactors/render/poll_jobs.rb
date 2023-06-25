@@ -24,6 +24,9 @@ module Render
           end
         end
       end
+
+    rescue StandardError => e
+      fail_context_to_sentry!(error: e)
     end
 
     private
