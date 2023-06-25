@@ -31,6 +31,8 @@ module Render
         send_service_deleted_event(db_service)
       end
 
+    rescue StandardError => e
+      fail_context_to_sentry!(error: e)
     end
   
     private

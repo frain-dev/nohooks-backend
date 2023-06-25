@@ -159,7 +159,7 @@ class Api::V1::AccountsController < ApplicationController
   end
 
   def set_account
-    @account ||= Account.where(user: current_user, id: params[:id]).first
+    @account ||= Account.find_by!(user: current_user, id: params[:id])
   end
 
   def set_account_type
