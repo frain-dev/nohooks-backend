@@ -15,6 +15,8 @@ class PollAccountsJob < ApplicationJob
       PollRenderResourcesJob.perform_later(account.id)
     when "NotionAccountConfiguration"
       PollNotionResourcesJob.perform_later(account.id)
+    when "DigitalOceanAccountConfiguration"
+      PollDigitalOceanResourcesJob.perform_later(account.id)
     end
   end
 end

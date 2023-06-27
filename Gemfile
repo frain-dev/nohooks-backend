@@ -90,6 +90,9 @@ gem 'faraday'
 # Notion Client
 gem 'notion-ruby-client'
 
+# Digital Ocean Client
+gem 'droplet_kit'
+
 # Google PubSub
 # gem 'google-cloud-pubsub'
 # gem 'grpc'
