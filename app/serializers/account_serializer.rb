@@ -23,15 +23,39 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class AccountSerializer < ApplicationSerializer
-  attributes :id, :name, :type, :portal_link_url, :notion_databases
+  attributes :id, :name, :type, :portal_link_url, :metadata
 
   def type
-    return "render" if object.configurable_type == "RenderAccountConfiguration"
-    return "notion" if object.configurable_type == "NotionAccountConfiguration"
-    return "digital_ocean" if object.configurable_type == "DigitalOceanAccountConfiguration"
+    account_type
   end
 
-  def notion_databases
-    object.notion_databases.pluck(:database_id)
+  def metadata
+    case account_type
+    when "render"
+      {
+        "api_key": object.configurable.api_key
+      }
+    when "notion"
+      {
+        "databases": object.notion_databases.pluck(:database_id)
+      }
+    when "digital_ocean"
+      {
+        "access_token": object.configurable.access_token
+      }
+    end
+  end
+
+  private 
+
+  def account_type
+    case object.configurable_type
+    when "RenderAccountConfiguration"
+      "render"
+    when "NotionAccountConfiguration"
+      "notion"
+    when "DigitalOceanAccountConfiguration"
+      "digital_ocean"
+    end
   end
 end
