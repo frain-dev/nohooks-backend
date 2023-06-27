@@ -24,6 +24,8 @@ class Api::V1::AccountsController < ApplicationController
       create_render_account_configuration
     elsif type == "notion"
       create_notion_account_configuration
+    elsif type == "digital_ocean"
+      create_digital_ocean_configuration
     else
       json = generate_json(status: true, message: ApiResponse::Account.creation_failed)
       render status: 400, json: json
@@ -44,6 +46,8 @@ class Api::V1::AccountsController < ApplicationController
       update_render_configuration
     elsif @account.configurable_type == "NotionAccountConfiguration"
       update_notion_configuration
+    elsif @account.configurable_type == "DigitalOceanAccountConfiguration"
+      update_digital_ocean_configuration
     else
       json = generate_json(status: false, message: ApiResponse::Account.update_failed)
       render status: 400, json: json
@@ -94,6 +98,35 @@ class Api::V1::AccountsController < ApplicationController
       @account.update!(portal_link_url: res.response['data']['url'])
     end
   end 
+
+  def create_digital_ocean_configuration
+    ActiveRecord::Base.transaction do
+      digital_ocean_config = DigitalOceanAccountConfiguration.create!(
+        access_token: create_params[:data][:access_token]
+      )
+
+      @account = Account.create(
+        user: current_user, 
+        name: create_params[:name],
+        sync_start_datetime: Time.now.utc.iso8601(3),
+        configurable: digital_ocean_config
+      )
+
+      portal_link = Convoy::PortalLink.new(
+        data: {
+          name: "#{@account.name}'s dashboard",
+          owner_id: @account.id,
+          can_manage_endpoint: true
+        }
+      )
+
+      res = portal_link.save
+      raise StandardError, "couldn't create portal link" if res&.response.nil? ||
+        res&.response['status'] == false
+
+      @account.update!(portal_link_url: res.response['data']['url'])
+    end
+  end
 
   def create_notion_account_configuration
     client = OAuth2::Client.new(ENV['NOTION_OAUTH_CLIENT_ID'],
@@ -146,6 +179,15 @@ class Api::V1::AccountsController < ApplicationController
     end
   end
 
+  def update_digital_ocean_configuration
+    ActiveRecord::Base.transaction do
+      @account.update!(name: update_params[:name])
+      if !update_params[:data].nil?
+        @account.configurable.update!(update_params[:data])
+      end
+    end
+  end
+
   def update_notion_configuration
     ActiveRecord::Base.transaction do
       @account.update!(name: update_params[:name])
@@ -170,6 +212,8 @@ class Api::V1::AccountsController < ApplicationController
         return "render"
       elsif @account&.configurable_type == "NotionAccountConfiguration"
         return "notion"
+      elsif @account&.configurable_type == "DigitalOceanAccountConfiguration"
+        return "digital_ocean"
       end
     end
   end

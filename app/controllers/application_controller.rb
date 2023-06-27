@@ -31,6 +31,6 @@ class ApplicationController < ActionController::API
   def authorize_request
     @current_user = Auth::AuthorizeApiRequest.new(request.headers).call[:user]
   rescue StandardError => e
-    render status: 400, json: { status: false, message: e.message }
+    render status: 401, json: { status: false, message: e.message }
   end
 end

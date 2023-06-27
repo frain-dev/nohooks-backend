@@ -6,7 +6,7 @@
 #  configurable_type   :string
 #  name                :string           not null
 #  portal_link_url     :string
-#  status              :integer          default(0)
+#  status              :integer          default("active")
 #  sync_start_datetime :datetime         not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
