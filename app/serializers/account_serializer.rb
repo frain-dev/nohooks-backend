@@ -2,15 +2,16 @@
 #
 # Table name: accounts
 #
-#  id                :uuid             not null, primary key
-#  configurable_type :string
-#  last_poll_time    :datetime         not null
-#  name              :string           not null
-#  portal_link_url   :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  configurable_id   :uuid
-#  user_id           :uuid             not null
+#  id                  :uuid             not null, primary key
+#  configurable_type   :string
+#  name                :string           not null
+#  portal_link_url     :string
+#  status              :integer          default(0)
+#  sync_start_datetime :datetime         not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  configurable_id     :uuid
+#  user_id             :uuid             not null
 #
 # Indexes
 #
