@@ -52,7 +52,6 @@ module DigitalOcean
 
     def send_droplet_created_event(droplet, hash)
       ActiveRecord::Base.transaction do 
-        binding.pry
         DigitalOceanDroplet.create!(account: @account, 
                                     droplet_id: droplet.id, object_hash: hash)
         Webhook.create!(account: @account, 

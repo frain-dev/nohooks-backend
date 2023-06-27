@@ -615,6 +615,14 @@ ALTER TABLE ONLY public.notion_rows
 
 
 --
+-- Name: digital_ocean_droplets fk_rails_9fe5e8fe8c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.digital_ocean_droplets
+    ADD CONSTRAINT fk_rails_9fe5e8fe8c FOREIGN KEY (accounts_id) REFERENCES public.accounts(id);
+
+
+--
 -- Name: accounts fk_rails_b1e30bebc8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
