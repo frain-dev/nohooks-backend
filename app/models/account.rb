@@ -26,6 +26,9 @@ class Account < ApplicationRecord
   belongs_to :configurable, polymorphic: true, dependent: :destroy
   belongs_to :user
 
+  STATUSES = { active: 0, inactive: 1 }.freeze
+  enum status: STATUSES
+
   def render_services
     RenderService.where(account: self)
   end

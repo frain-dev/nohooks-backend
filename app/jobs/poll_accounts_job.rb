@@ -2,7 +2,7 @@ class PollAccountsJob < ApplicationJob
   queue_as :render_scheduler
 
   def perform(*args)
-    Account.all.each do |account|
+    Account.active.each do |account|
       poll_account(account)
     end
   end
