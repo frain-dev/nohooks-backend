@@ -7,10 +7,8 @@ module DigitalOcean
       return if @account.configurable_type != "DigitalOceanAccountConfiguration"
 
       droplets = retrieve_account_droplets
-      return if droplets.empty?
 
       droplets.each do |droplet|
-        droplet = droplet.droplet 
         computed_hash = compute_droplet_hash(droplet)
 
         db_droplet = DigitalOceanDroplet.find_by_droplet_id(droplet.id)
