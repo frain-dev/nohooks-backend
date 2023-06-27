@@ -2,24 +2,27 @@
 :concurrency: 5
 development:
   :queues:
-    - render_scheduler
+    - push_webhooks
     - render_poller
     - notion_poller
-    - push_webhooks
+    - digital_ocean_poller
+    - render_scheduler
     - webhooks_delivery_scheduler
 staging:
   :concurrency: 10
   :queues:
-    - render_scheduler
+    - push_webhooks
     - render_poller
     - notion_poller
-    - push_webhooks
+    - digital_ocean_poller
+    - render_scheduler
     - webhooks_delivery_scheduler
 production:
   :concurrency: 10
   :queues:
-    - render_scheduler
+    - push_webhooks
     - render_poller
     - notion_poller
-    - push_webhooks
+    - digital_ocean_poller
+    - render_scheduler
     - webhooks_delivery_scheduler
