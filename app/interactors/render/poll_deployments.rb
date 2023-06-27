@@ -33,7 +33,8 @@ module Render
   
     def retrieve_account_deployments(service, cursor: nil)
       deployments = @client.deploys.list(service_id: service.service_id, 
-                                         limit: 100, cursor: cursor)
+                                         limit: 100, cursor: cursor, 
+                                         createdAfter: @account.sync_start_datetime)
       if deployments.total == 0
         return deployments.data
       end

@@ -48,13 +48,14 @@ SET default_table_access_method = heap;
 CREATE TABLE public.accounts (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
-    last_poll_time timestamp(6) without time zone NOT NULL,
+    sync_start_datetime timestamp(6) without time zone NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     configurable_type character varying,
     configurable_id uuid,
     user_id uuid NOT NULL,
-    portal_link_url character varying
+    portal_link_url character varying,
+    status integer DEFAULT 0
 );
 
 
@@ -586,6 +587,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230621133250'),
 ('20230623065032'),
 ('20230623065709'),
-('20230623070129');
+('20230623070129'),
+('20230627045713');
 
 

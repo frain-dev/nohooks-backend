@@ -75,7 +75,7 @@ class Api::V1::AccountsController < ApplicationController
       @account = Account.create(
         user: current_user,
         name: create_params[:name],
-        last_poll_time: DateTime.now,
+        sync_start_datetime: Time.now.utc.iso8601(3),
         configurable: render_account_config
       )
 
@@ -113,7 +113,7 @@ class Api::V1::AccountsController < ApplicationController
       @account = Account.create!(
         user: current_user,
         name: create_params[:name],
-        last_poll_time: DateTime.now,
+        sync_start_datetime: Time.now.utc.iso8601(3),
         configurable: notion_account_config
       )
 
