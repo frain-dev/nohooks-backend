@@ -91,7 +91,7 @@ CREATE TABLE public.digital_ocean_droplets (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     droplet_id character varying NOT NULL,
     object_hash character varying NOT NULL,
-    accounts_id uuid,
+    account_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -442,17 +442,17 @@ CREATE INDEX index_accounts_on_user_id ON public.accounts USING btree (user_id);
 
 
 --
--- Name: index_digital_ocean_droplets_on_accounts_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_digital_ocean_droplets_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_digital_ocean_droplets_on_accounts_id ON public.digital_ocean_droplets USING btree (accounts_id);
+CREATE INDEX index_digital_ocean_droplets_on_account_id ON public.digital_ocean_droplets USING btree (account_id);
 
 
 --
--- Name: index_digital_ocean_droplets_on_accounts_id_and_droplet_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_digital_ocean_droplets_on_account_id_and_droplet_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_digital_ocean_droplets_on_accounts_id_and_droplet_id ON public.digital_ocean_droplets USING btree (accounts_id, droplet_id);
+CREATE UNIQUE INDEX index_digital_ocean_droplets_on_account_id_and_droplet_id ON public.digital_ocean_droplets USING btree (account_id, droplet_id);
 
 
 --
@@ -615,19 +615,19 @@ ALTER TABLE ONLY public.notion_rows
 
 
 --
--- Name: digital_ocean_droplets fk_rails_9fe5e8fe8c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.digital_ocean_droplets
-    ADD CONSTRAINT fk_rails_9fe5e8fe8c FOREIGN KEY (accounts_id) REFERENCES public.accounts(id);
-
-
---
 -- Name: accounts fk_rails_b1e30bebc8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.accounts
     ADD CONSTRAINT fk_rails_b1e30bebc8 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: digital_ocean_droplets fk_rails_d7c4724898; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.digital_ocean_droplets
+    ADD CONSTRAINT fk_rails_d7c4724898 FOREIGN KEY (account_id) REFERENCES public.accounts(id);
 
 
 --
@@ -673,7 +673,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230623065709'),
 ('20230623070129'),
 ('20230627045713'),
-('20230627193859'),
 ('20230627200008'),
 ('20230627202802');
 

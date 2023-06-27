@@ -7,10 +7,8 @@ module DigitalOcean
       return if @account.configurable_type != "DigitalOceanAccountConfiguration"
 
       droplets = retrieve_account_droplets
-      return if droplets.empty?
 
       droplets.each do |droplet|
-        droplet = droplet.droplet 
         computed_hash = compute_droplet_hash(droplet)
 
         db_droplet = DigitalOceanDroplet.find_by_droplet_id(droplet.id)
@@ -54,6 +52,7 @@ module DigitalOcean
 
     def send_droplet_created_event(droplet, hash)
       ActiveRecord::Base.transaction do 
+        binding.pry
         DigitalOceanDroplet.create!(account: @account, 
                                     droplet_id: droplet.id, object_hash: hash)
         Webhook.create!(account: @account, 
