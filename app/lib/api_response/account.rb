@@ -10,7 +10,7 @@ module ApiResponse
       "Account created successfully"
     end
 
-    def self.created_failed
+    def self.create_failed
       "Account creation failed"
     end
 
