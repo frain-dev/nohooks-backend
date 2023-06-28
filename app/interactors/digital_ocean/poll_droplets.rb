@@ -41,7 +41,7 @@ module DigitalOcean
 
     def retrieve_deleted_droplets(droplets)
       account_droplets = DigitalOceanDroplet.where(account: @account).pluck(:droplet_id)
-      digital_ocean_droplets = retrieve_account_droplets.map(&:id)
+      digital_ocean_droplets = retrieve_account_droplets.map { |d| d.id.to_s }
       deleted_droplets = account_droplets - digital_ocean_droplets
       DigitalOceanDroplet.where(droplet_id: deleted_droplets)
     end
