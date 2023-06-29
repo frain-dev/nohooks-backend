@@ -76,7 +76,7 @@ class Api::V1::AccountsController < ApplicationController
         api_key: create_params[:data][:api_key]
       )
 
-      @account = Account.create(
+      @account = Account.create!(
         user: current_user,
         name: create_params[:name],
         sync_start_datetime: Time.now.utc.iso8601(3),
@@ -105,7 +105,7 @@ class Api::V1::AccountsController < ApplicationController
         access_token: create_params[:data][:access_token]
       )
 
-      @account = Account.create(
+      @account = Account.create!(
         user: current_user, 
         name: create_params[:name],
         sync_start_datetime: Time.now.utc.iso8601(3),

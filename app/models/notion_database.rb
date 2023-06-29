@@ -18,6 +18,8 @@
 #  fk_rails_...  (account_id => accounts.id)
 #
 class NotionDatabase < ApplicationRecord
+  validates_with PlatformConfigurationValidator
+
   belongs_to :account
   has_many :notion_rows, dependent: :delete_all
 end

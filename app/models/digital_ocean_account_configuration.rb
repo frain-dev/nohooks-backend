@@ -8,5 +8,7 @@
 #  updated_at   :datetime         not null
 #
 class DigitalOceanAccountConfiguration < ApplicationRecord
+  validates_with PlatformConfigurationValidator
+
   has_one :account, as: :configurable, class_name: 'Account'
 end
