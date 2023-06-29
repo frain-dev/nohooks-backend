@@ -1,6 +1,6 @@
 module Models
   class BaseModel < ActiveModelSerializers::Model
-    attributes :status, :message, :data, :errors
+    attributes :status, :message, :data
   end
 end
 
