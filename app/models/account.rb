@@ -26,15 +26,10 @@ class Account < ApplicationRecord
   belongs_to :configurable, polymorphic: true, dependent: :destroy
   belongs_to :user
   has_many :webhooks, dependent: :delete_all
+  has_many :render_services, dependent: :delete_all
+  has_many :notion_databases, dependent: :delete_all
+
 
   STATUSES = { active: 0, inactive: 1 }.freeze
   enum status: STATUSES
-
-  def render_services
-    RenderService.where(account: self)
-  end
-
-  def notion_databases
-    NotionDatabase.where(account: self)
-  end
 end

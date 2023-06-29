@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
   protected
 
   def record_invalid(e)
-    json = { status: false, message: e.message, data: e.record.errors }
+    json = { status: false, message: e.message, errors: e.record.errors }
     render status: 400, json: json
   end
 
