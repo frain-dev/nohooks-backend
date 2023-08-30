@@ -28,7 +28,6 @@ class Account < ApplicationRecord
   has_many :webhooks, dependent: :delete_all
   has_many :render_services, dependent: :delete_all
   has_many :notion_databases, dependent: :delete_all
-  has_many :notion_rows, dependent: :delete_all
 
 
   STATUSES = { active: 0, inactive: 1 }.freeze
