@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (notion_database_id => notion_databases.id)
+#  fk_rails_...  (notion_database_id => notion_databases.id) ON DELETE => cascade
 #
 FactoryBot.define do
   factory :notion_row do

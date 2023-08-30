@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (notion_database_id => notion_databases.id)
+#  fk_rails_...  (notion_database_id => notion_databases.id) ON DELETE => cascade
 #
 class NotionRow < ApplicationRecord
   belongs_to :notion_database
