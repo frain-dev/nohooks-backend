@@ -98,18 +98,6 @@ CREATE TABLE public.digital_ocean_droplets (
 
 
 --
--- Name: digitalocean_account_configurations; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.digitalocean_account_configurations (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    access_token character varying NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
-);
-
-
---
 -- Name: notion_account_configurations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -305,14 +293,6 @@ ALTER TABLE ONLY public.digital_ocean_account_configurations
 
 ALTER TABLE ONLY public.digital_ocean_droplets
     ADD CONSTRAINT digital_ocean_droplets_pkey PRIMARY KEY (id);
-
-
---
--- Name: digitalocean_account_configurations digitalocean_account_configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.digitalocean_account_configurations
-    ADD CONSTRAINT digitalocean_account_configurations_pkey PRIMARY KEY (id);
 
 
 --
@@ -587,7 +567,7 @@ ALTER TABLE ONLY public.render_services
 --
 
 ALTER TABLE ONLY public.render_deployments
-    ADD CONSTRAINT fk_rails_39c1f3b789 FOREIGN KEY (render_service_id) REFERENCES public.render_services(id);
+    ADD CONSTRAINT fk_rails_39c1f3b789 FOREIGN KEY (render_service_id) REFERENCES public.render_services(id) ON DELETE CASCADE;
 
 
 --
@@ -611,7 +591,7 @@ ALTER TABLE ONLY public.webhooks
 --
 
 ALTER TABLE ONLY public.notion_rows
-    ADD CONSTRAINT fk_rails_96181da0af FOREIGN KEY (notion_database_id) REFERENCES public.notion_databases(id);
+    ADD CONSTRAINT fk_rails_96181da0af FOREIGN KEY (notion_database_id) REFERENCES public.notion_databases(id) ON DELETE CASCADE;
 
 
 --
@@ -674,6 +654,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230623070129'),
 ('20230627045713'),
 ('20230627200008'),
-('20230627202802');
+('20230627202802'),
+('20230830142630');
 
 

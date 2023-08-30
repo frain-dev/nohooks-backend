@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (render_service_id => render_services.id)
+#  fk_rails_...  (render_service_id => render_services.id) ON DELETE => cascade
 #
 FactoryBot.define do
   factory :render_deployment do
